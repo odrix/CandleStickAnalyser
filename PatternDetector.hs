@@ -1,3 +1,5 @@
+module PatternDetector where
+
 import CandleStick
 
 detect :: [CandleStick] -> [String]
@@ -7,3 +9,7 @@ detect (x:xs)
     | isDoji x = "doji": detect xs
     | isMarubozu x = "marubozu" : detect xs
     | otherwise = "" : detect xs
+
+mtl :: Maybe [a] -> [a]
+mtl Nothing = []
+mtl (Just [xs]) = [xs]

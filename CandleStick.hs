@@ -1,11 +1,19 @@
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE DeriveGeneric #-}
+
 module CandleStick where
-    
+
+import GHC.Generics
+
 data CandleStick = CandleStick {
+    openTime :: Integer,
     open    :: Double,
-    close   :: Double,
     hight   :: Double,
-    low     :: Double
-} deriving (Show)
+    low     :: Double,
+    close   :: Double,
+    volume  :: Double,
+    closeTime :: Integer
+} deriving (Generic, Show)
 
 body :: CandleStick -> Double
 body candle = abs (open candle - close candle)
