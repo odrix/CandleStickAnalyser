@@ -1,3 +1,5 @@
+module CandleStick where
+    
 data CandleStick = CandleStick {
     open    :: Double,
     close   :: Double,
