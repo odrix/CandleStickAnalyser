@@ -13,26 +13,26 @@ data CandleStick = CandleStick {
     close   :: Double,
     volume  :: Double,
     closeTime :: Integer
-} deriving (Generic, Show)
+} deriving (Generic, Eq, Show)
 
 body :: CandleStick -> Double
 body candle = abs (open candle - close candle)
 
 lowerShadow :: CandleStick -> Double
-lowerShadow candle 
+lowerShadow candle
     | isRed candle = low candle - close candle
     | otherwise = low candle - open candle
 
 upperShadow :: CandleStick -> Double
-upperShadow candle 
+upperShadow candle
     | isRed candle = hight candle - open candle
     | otherwise = hight candle - close candle
 
 lowerShadowRatio :: CandleStick -> Double
-lowerShadowRatio candle  = lowerShadow candle / (body candle)
+lowerShadowRatio candle  = lowerShadow candle / body candle
 
 upperShadowRatio :: CandleStick -> Double
-upperShadowRatio candle = upperShadow candle / (body candle)
+upperShadowRatio candle = upperShadow candle / body candle
 
 isRed :: CandleStick -> Bool
 isRed candle = open candle > close candle
@@ -41,7 +41,7 @@ isGreen :: CandleStick -> Bool
 isGreen candle = open candle < close candle
 
 bodyPourcent :: CandleStick -> Double
-bodyPourcent candle = abs (open candle - close candle) / (open candle)
+bodyPourcent candle = abs (open candle - close candle) / open candle
 
 hasSmallBody :: CandleStick -> Bool
 hasSmallBody candle = bodyPourcent candle < maxSmallBody
@@ -57,13 +57,13 @@ hasCloseBody candle = bodyPourcent candle < maxCloseBody
 
 
 isHammer :: CandleStick -> Bool
-isHammer candle 
+isHammer candle
     | isGreen candle && hasSmallBody candle && lowerShadowRatio candle > minLongShadow && upperShadowRatio candle < maxTailShadow = True
     | isRed candle && hasSmallBody candle && upperShadowRatio candle > minLongShadow && lowerShadowRatio candle < maxTailShadow = True
     | otherwise = False
 
 isDoji :: CandleStick -> Bool
-isDoji candle = hasCloseBody candle
+isDoji = hasCloseBody
 
 
 isMarubozu :: CandleStick -> Bool
