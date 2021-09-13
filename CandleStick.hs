@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE DeriveGeneric #-}
+{-# OPTIONS_GHC -Wno-incomplete-patterns #-}
 
 module CandleStick where
 
@@ -68,6 +69,9 @@ isDoji = hasCloseBody
 
 isMarubozu :: CandleStick -> Bool
 isMarubozu candle = hasNormalBody candle && upperShadowRatio candle < maxTailShadow && lowerShadowRatio candle < maxTailShadow
+
+isMorningStar :: [CandleStick] -> Bool
+isMorningStar [a,b,c] = isRed a && isDoji b && isGreen c
 
 
 maxCloseBody = 0.005
