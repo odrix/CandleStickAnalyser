@@ -42,13 +42,8 @@ func main() {
 	}
 
 	for _, kline := range kl {
-		fmt.Printf("%#v\n", kline.Open)
 		c := Candle{kline}
-		color := "red"
-		if c.IsGreen() {
-			color = "green"
-		}
-		fmt.Println(color)
+		fmt.Printf("%#v - %#.2f%% \n", kline.Open, c.BodyPercent())
 	}
 
 }
