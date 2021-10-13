@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-const baseUrl string = "https://api.binance.com"
+//const baseUrl string = "https://api.binance.com"
 
 func main() {
 	var logger log.Logger
@@ -17,16 +17,12 @@ func main() {
 	logger = level.NewFilter(logger, level.AllowAll())
 	logger = log.With(logger, "time", log.DefaultTimestampUTC, "caller", log.DefaultCaller)
 
-	//hmacSigner := &binance.HmacSigner{
-	//	Key: []byte(os.Getenv("BINANCE_SECRET")),
-	//}
-	ctx, _ := context.WithCancel(context.Background())
-	// use second return value for cancelling request
+	var ctx, _ = context.WithCancel(context.Background())
 
 	binanceService := binance.NewAPIService(
 		"https://www.binance.com",
-		"",  //os.Getenv("BINANCE_APIKEY"),
-		nil, //hmacSigner,
+		"", //os.Getenv("BINANCE_APIKEY"),
+		nil,
 		logger,
 		ctx,
 	)
@@ -34,16 +30,23 @@ func main() {
 
 	kl, err := b.Klines(binance.KlinesRequest{
 		Symbol:   "BTCUSDT",
-		Interval: binance.Hour,
-		Limit:    50,
+		Interval: binance.Day,
+		Limit:    300,
 	})
 	if err != nil {
 		panic(err)
 	}
 
-	for _, kline := range kl {
-		c := Candle{kline}
-		fmt.Printf("%#v - %#.2f%% \n", kline.Open, c.BodyPercent())
+	var candlesDesc []Candle
+	for i := len(kl) - 1; i > 0; i-- {
+		candlesDesc = append(candlesDesc, Candle{kl[i]})
 	}
+
+	for i := 0; i < len(candlesDesc); i++ {
+		if IsMorningStar(candlesDesc[i:]) {
+			fmt.Printf("morning star on %s \n", candlesDesc[i].OpenTime)
+		}
+	}
+	fmt.Printf("end.")
 
 }

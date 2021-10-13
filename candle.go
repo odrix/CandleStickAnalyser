@@ -8,8 +8,9 @@ import (
 const maxCloseBody float64 = 0.005
 const maxSmallBody float64 = 0.02
 const minBigBody float64 = 0.05
-const maxTailShadow float64 = 0.05
-const minLongShadow float64 = 0.6
+
+//const maxTailShadow float64 = 0.05
+//const minLongShadow float64 = 0.6
 
 //type Candle interface{
 //	HighShadow() float64
@@ -38,9 +39,23 @@ type Candle struct {
 //	}
 //}
 
+func (candle Candle) IsRed() bool {
+	return candle.Open > candle.Close
+}
+
+func (candle Candle) IsGreen() bool {
+	return candle.Open < candle.Close
+}
+
 func (candle Candle) Body() float64        { return math.Abs(candle.Open - candle.Close) }
 func (candle Candle) BodyRatio() float64   { return math.Abs(candle.Open-candle.Close) / candle.Open }
 func (candle Candle) BodyPercent() float64 { return candle.BodyRatio() * 100 }
+
+//BodyLowest the lowest price in body's candle
+func (candle Candle) BodyLowest() float64 { return math.Min(candle.Open, candle.Close) }
+
+//BodyHighest the highest price in body's candle
+func (candle Candle) BodyHighest() float64 { return math.Max(candle.Open, candle.Close) }
 
 //func (candle RedCandle) LowShadow() float64 { return candle.Low - candle.Close }
 //func (candle GreenCandle) LowShadow() float64 { return candle.Low - candle.Open }
@@ -55,6 +70,18 @@ func (candle Candle) IsBody() bool {
 }
 func (candle Candle) IsLong() bool { return candle.BodyRatio() > minBigBody }
 
-func IsMorningStar(candles []Candle) bool {
-	return false // one red not small plus one small with long low shadow and green not small
+func IsMorningStar(candlesSortDesc []Candle) bool {
+	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	return candlesSortDesc[0].IsGreen() && !candlesSortDesc[0].IsSmall() &&
+		candlesSortDesc[1].IsSmall() &&
+		candlesSortDesc[2].IsRed() && !candlesSortDesc[2].IsSmall() &&
+		IsDownTrend(candlesSortDesc[2:])
+
+}
+
+// IsDownTrend is in a current downtrend
+// remarks:  not good, but it's a first shot
+func IsDownTrend(candlesSortDesc []Candle) bool {
+	return candlesSortDesc[0].BodyLowest() < candlesSortDesc[5].BodyLowest() ||
+		candlesSortDesc[0].BodyLowest() < candlesSortDesc[8].BodyLowest()
 }
