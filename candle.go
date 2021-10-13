@@ -12,43 +12,20 @@ const minBigBody float64 = 0.05
 //const maxTailShadow float64 = 0.05
 //const minLongShadow float64 = 0.6
 
-//type Candle interface{
-//	HighShadow() float64
-//	LowShadow() float64
-//	Body() float64
-//	type RedCandle, GreenCandle
-//}
-
-//type RedCandle struct {
-//	*binance.Kline
-//}
-//
-//type GreenCandle struct {
-//	*binance.Kline
-//}
-
 type Candle struct {
 	*binance.Kline
 }
 
-//func CreateCandle(kline *binance.Kline) Candle {
-//	if kline.Close < kline.Open {
-//		return  RedCandle{kline}
-//	} else {
-//		return  GreenCandle{kline}
-//	}
-//}
+func (candle Candle) IsRed() bool   { return candle.Open > candle.Close }
+func (candle Candle) IsGreen() bool { return candle.Open < candle.Close }
 
-func (candle Candle) IsRed() bool {
-	return candle.Open > candle.Close
-}
+//Body size of the body
+func (candle Candle) Body() float64 { return math.Abs(candle.Open - candle.Close) }
 
-func (candle Candle) IsGreen() bool {
-	return candle.Open < candle.Close
-}
+//BodyRatio ratio with open price
+func (candle Candle) BodyRatio() float64 { return math.Abs(candle.Open-candle.Close) / candle.Open }
 
-func (candle Candle) Body() float64        { return math.Abs(candle.Open - candle.Close) }
-func (candle Candle) BodyRatio() float64   { return math.Abs(candle.Open-candle.Close) / candle.Open }
+//BodyPercent body ratio in percent
 func (candle Candle) BodyPercent() float64 { return candle.BodyRatio() * 100 }
 
 //BodyLowest the lowest price in body's candle
