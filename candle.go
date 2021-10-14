@@ -56,9 +56,26 @@ func IsMorningStar(candlesSortDesc []Candle) bool {
 
 }
 
+func IsEveningStar(candlesSortDesc []Candle) bool {
+	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	return len(candlesSortDesc) > 2 &&
+		candlesSortDesc[0].IsRed() && !candlesSortDesc[0].IsSmall() &&
+		candlesSortDesc[1].IsSmall() &&
+		candlesSortDesc[2].IsGreen() && !candlesSortDesc[2].IsSmall() &&
+		IsUpTrend(candlesSortDesc[2:])
+
+}
+
 // IsDownTrend is in a current downtrend
 // remarks:  not good, but it's a first shot
 func IsDownTrend(candlesSortDesc []Candle) bool {
 	return candlesSortDesc[0].BodyLowest() < candlesSortDesc[5].BodyLowest() ||
 		candlesSortDesc[0].BodyLowest() < candlesSortDesc[8].BodyLowest()
+}
+
+// IsUpTrend is in a current uptrend
+// remarks:  not good, but it's a first shot
+func IsUpTrend(candlesSortDesc []Candle) bool {
+	return candlesSortDesc[0].BodyLowest() > candlesSortDesc[5].BodyLowest() ||
+		candlesSortDesc[0].BodyLowest() > candlesSortDesc[8].BodyLowest()
 }

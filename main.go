@@ -45,6 +45,8 @@ func main() {
 	for i := 0; i < len(candlesDesc); i++ {
 		if IsMorningStar(candlesDesc[i:]) {
 			fmt.Printf("morning star on %s \n", candlesDesc[i].OpenTime)
+		} else if IsEveningStar(candlesDesc[i:]) {
+			fmt.Printf("evening star on %s \n", candlesDesc[i].OpenTime)
 		}
 	}
 	fmt.Printf("end.")
