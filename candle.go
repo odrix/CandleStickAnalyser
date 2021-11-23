@@ -1,8 +1,9 @@
 package main
 
 import (
-	"github.com/binance-exchange/go-binance"
 	"math"
+
+	"github.com/binance-exchange/go-binance"
 )
 
 const maxCloseBody float64 = 0.005
@@ -49,11 +50,10 @@ func (candle Candle) IsLong() bool { return candle.BodyRatio() > minBigBody }
 
 func IsMorningStar(candlesSortDesc []Candle) bool {
 	// one red not small plus one small with long low shadow and green not small and during a downtrend
-	return candlesSortDesc[0].IsGreen() && !candlesSortDesc[0].IsSmall() &&
+	return len(candlesSortDesc) > 2 && candlesSortDesc[0].IsGreen() && !candlesSortDesc[0].IsSmall() &&
 		candlesSortDesc[1].IsSmall() &&
 		candlesSortDesc[2].IsRed() && !candlesSortDesc[2].IsSmall() &&
-		IsDownTrend(candlesSortDesc[2:])
-
+		IsDownTrend(candlesSortDesc[2:], 5)
 }
 
 func IsEveningStar(candlesSortDesc []Candle) bool {
@@ -62,20 +62,37 @@ func IsEveningStar(candlesSortDesc []Candle) bool {
 		candlesSortDesc[0].IsRed() && !candlesSortDesc[0].IsSmall() &&
 		candlesSortDesc[1].IsSmall() &&
 		candlesSortDesc[2].IsGreen() && !candlesSortDesc[2].IsSmall() &&
-		IsUpTrend(candlesSortDesc[2:])
+		IsUpTrend(candlesSortDesc[2:], 5)
+}
 
+func IsThreeWhiteSoldiers(candlesSortDesc []Candle) bool {
+	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	return len(candlesSortDesc) > 2 &&
+		candlesSortDesc[0].IsGreen() && !candlesSortDesc[0].IsSmall() &&
+		candlesSortDesc[1].IsGreen() && !candlesSortDesc[1].IsSmall() &&
+		candlesSortDesc[2].IsGreen() && !candlesSortDesc[2].IsSmall() &&
+		IsDownTrend(candlesSortDesc[2:], 9)
+}
+
+func IsThreeBlackCrows(candlesSortDesc []Candle) bool {
+	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	return len(candlesSortDesc) > 2 &&
+		candlesSortDesc[0].IsRed() && !candlesSortDesc[0].IsSmall() &&
+		candlesSortDesc[1].IsRed() && !candlesSortDesc[1].IsSmall() &&
+		candlesSortDesc[2].IsRed() && !candlesSortDesc[2].IsSmall() &&
+		IsUpTrend(candlesSortDesc[2:], 9)
 }
 
 // IsDownTrend is in a current downtrend
 // remarks:  not good, but it's a first shot
-func IsDownTrend(candlesSortDesc []Candle) bool {
-	return candlesSortDesc[0].BodyLowest() < candlesSortDesc[5].BodyLowest() ||
-		candlesSortDesc[0].BodyLowest() < candlesSortDesc[8].BodyLowest()
+func IsDownTrend(candlesSortDesc []Candle, trendDuration int) bool {
+	return len(candlesSortDesc) > trendDuration &&
+		candlesSortDesc[0].BodyLowest() < candlesSortDesc[trendDuration].BodyLowest()
 }
 
 // IsUpTrend is in a current uptrend
 // remarks:  not good, but it's a first shot
-func IsUpTrend(candlesSortDesc []Candle) bool {
-	return candlesSortDesc[0].BodyLowest() > candlesSortDesc[5].BodyLowest() ||
-		candlesSortDesc[0].BodyLowest() > candlesSortDesc[8].BodyLowest()
+func IsUpTrend(candlesSortDesc []Candle, trendDuration int) bool {
+	return len(candlesSortDesc) > trendDuration &&
+		candlesSortDesc[0].BodyLowest() > candlesSortDesc[trendDuration].BodyLowest()
 }
