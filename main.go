@@ -19,66 +19,81 @@ func main() {
 	logger = level.NewFilter(logger, level.AllowAll())
 	logger = log.With(logger, "time", log.DefaultTimestampUTC, "caller", log.DefaultCaller)
 
-	pair := "BTCUSDT"
-	kl := getKline(logger, pair, binance.Day, 50)
+	//for i := 0; i < len(candlesDesc); i++ {
+	detectOnManyPairToday(logger)
+	//}
+	fmt.Printf("end.")
+}
 
-	var candlesDesc []Candle
-	for i := len(kl) - 1; i > 0; i-- {
-		candlesDesc = append(candlesDesc, Candle{kl[i]})
-	}
+func detectOnManyPairToday(logger log.Logger) {
+	pairs := [5]string{"BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "ADAUSDT"}
 
-	for i := 0; i < len(candlesDesc); i++ {
-		p := Pattern{}
-		if IsMorningStar(candlesDesc[i:]) {
-			p = Pattern{
-				Pair:  pair,
-				Type:  "Morning Star",
-				Start: candlesDesc[i-2].OpenTime,
-				End:   candlesDesc[i].CloseTime,
-			}
-		} else if IsEveningStar(candlesDesc[i:]) {
-			p = Pattern{
-				Pair:  pair,
-				Type:  "Evening Star",
-				Start: candlesDesc[i-2].OpenTime,
-				End:   candlesDesc[i].CloseTime,
-			}
-		} else if IsThreeWhiteSoldiers(candlesDesc[i:]) {
-			p = Pattern{
-				Pair:  pair,
-				Type:  "Three White Soldiers",
-				Start: candlesDesc[i-2].OpenTime,
-				End:   candlesDesc[i].CloseTime,
-			}
-		} else if IsThreeBlackCrows(candlesDesc[i:]) {
-			p = Pattern{
-				Pair:  pair,
-				Type:  "Three Black Crows",
-				Start: candlesDesc[i-2].OpenTime,
-				End:   candlesDesc[i].CloseTime,
-			}
-		} else if IsWhiteMarubozu(candlesDesc[i:]) {
-			p = Pattern{
-				Pair:  pair,
-				Type:  "White Marubozu",
-				Start: candlesDesc[i].OpenTime,
-				End:   candlesDesc[i].CloseTime,
-			}
-		} else if IsBlackMarubozu(candlesDesc[i:]) {
-			p = Pattern{
-				Pair:  pair,
-				Type:  "Black Marubozu",
-				Start: candlesDesc[i].OpenTime,
-				End:   candlesDesc[i].CloseTime,
-			}
+	for j := 0; j < len(pairs); j++ {
+
+		pair := pairs[j]
+		kl := getKline(logger, pair, binance.Day, 10)
+
+		var candlesDesc []Candle
+		for i := len(kl) - 1; i > 0; i-- {
+			candlesDesc = append(candlesDesc, Candle{kl[i]})
 		}
+
+		i := 0
+		p := detectPattern(candlesDesc, i, pair)
 
 		if p.Type != "" {
 			trace(p)
 			notifyContacts(p)
 		}
 	}
-	fmt.Printf("end.")
+}
+
+func detectPattern(candlesDesc []Candle, i int, pair string) Pattern {
+	p := Pattern{}
+	if IsMorningStar(candlesDesc[i:]) {
+		p = Pattern{
+			Pair:  pair,
+			Type:  "Morning Star",
+			Start: candlesDesc[i-2].OpenTime,
+			End:   candlesDesc[i].CloseTime,
+		}
+	} else if IsEveningStar(candlesDesc[i:]) {
+		p = Pattern{
+			Pair:  pair,
+			Type:  "Evening Star",
+			Start: candlesDesc[i-2].OpenTime,
+			End:   candlesDesc[i].CloseTime,
+		}
+	} else if IsThreeWhiteSoldiers(candlesDesc[i:]) {
+		p = Pattern{
+			Pair:  pair,
+			Type:  "Three White Soldiers",
+			Start: candlesDesc[i-2].OpenTime,
+			End:   candlesDesc[i].CloseTime,
+		}
+	} else if IsThreeBlackCrows(candlesDesc[i:]) {
+		p = Pattern{
+			Pair:  pair,
+			Type:  "Three Black Crows",
+			Start: candlesDesc[i-2].OpenTime,
+			End:   candlesDesc[i].CloseTime,
+		}
+	} else if IsWhiteMarubozu(candlesDesc[i:]) {
+		p = Pattern{
+			Pair:  pair,
+			Type:  "White Marubozu",
+			Start: candlesDesc[i].OpenTime,
+			End:   candlesDesc[i].CloseTime,
+		}
+	} else if IsBlackMarubozu(candlesDesc[i:]) {
+		p = Pattern{
+			Pair:  pair,
+			Type:  "Black Marubozu",
+			Start: candlesDesc[i].OpenTime,
+			End:   candlesDesc[i].CloseTime,
+		}
+	}
+	return p
 }
 
 func trace(pattern Pattern) {
