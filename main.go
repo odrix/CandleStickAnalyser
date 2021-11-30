@@ -57,6 +57,20 @@ func main() {
 				Start: candlesDesc[i-2].OpenTime,
 				End:   candlesDesc[i].CloseTime,
 			}
+		} else if IsWhiteMarubozu(candlesDesc[i:]) {
+			p = Pattern{
+				Pair:  pair,
+				Type:  "White Marubozu",
+				Start: candlesDesc[i].OpenTime,
+				End:   candlesDesc[i].CloseTime,
+			}
+		} else if IsBlackMarubozu(candlesDesc[i:]) {
+			p = Pattern{
+				Pair:  pair,
+				Type:  "Black Marubozu",
+				Start: candlesDesc[i].OpenTime,
+				End:   candlesDesc[i].CloseTime,
+			}
 		}
 
 		if p.Type != "" {

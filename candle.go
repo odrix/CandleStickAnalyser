@@ -57,7 +57,7 @@ func IsMorningStar(candlesSortDesc []Candle) bool {
 }
 
 func IsEveningStar(candlesSortDesc []Candle) bool {
-	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	// one green not small plus one small with long low shadow and a red not small and during an uptrend
 	return len(candlesSortDesc) > 2 &&
 		candlesSortDesc[0].IsRed() && !candlesSortDesc[0].IsSmall() &&
 		candlesSortDesc[1].IsSmall() &&
@@ -66,7 +66,7 @@ func IsEveningStar(candlesSortDesc []Candle) bool {
 }
 
 func IsThreeWhiteSoldiers(candlesSortDesc []Candle) bool {
-	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	// three green with no or very small shadow and during a downtrend
 	return len(candlesSortDesc) > 2 &&
 		candlesSortDesc[0].IsGreen() && !candlesSortDesc[0].IsSmall() &&
 		candlesSortDesc[1].IsGreen() && !candlesSortDesc[1].IsSmall() &&
@@ -75,12 +75,26 @@ func IsThreeWhiteSoldiers(candlesSortDesc []Candle) bool {
 }
 
 func IsThreeBlackCrows(candlesSortDesc []Candle) bool {
-	// one red not small plus one small with long low shadow and green not small and during a downtrend
+	// three red with no or very small shadow and during an uptrend
 	return len(candlesSortDesc) > 2 &&
 		candlesSortDesc[0].IsRed() && !candlesSortDesc[0].IsSmall() &&
 		candlesSortDesc[1].IsRed() && !candlesSortDesc[1].IsSmall() &&
 		candlesSortDesc[2].IsRed() && !candlesSortDesc[2].IsSmall() &&
 		IsUpTrend(candlesSortDesc[2:], 9)
+}
+
+func IsWhiteMarubozu(candlesSortDesc []Candle) bool {
+	// a long green with no or very small shadow and during an downtrend
+	return len(candlesSortDesc) > 1 &&
+		candlesSortDesc[0].IsGreen() && candlesSortDesc[0].IsLong() &&
+		IsDownTrend(candlesSortDesc[2:], 7)
+}
+
+func IsBlackMarubozu(candlesSortDesc []Candle) bool {
+	// a long red with no or very small shadow and during an uptrend
+	return len(candlesSortDesc) > 1 &&
+		candlesSortDesc[0].IsRed() && candlesSortDesc[0].IsLong() &&
+		IsUpTrend(candlesSortDesc[2:], 7)
 }
 
 // IsDownTrend is in a current downtrend
