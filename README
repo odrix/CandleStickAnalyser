@@ -1,0 +1,10 @@
+a candlestick pattern detector and alert on cryptocurrency
+
+detect : 
+ - Morning Star
+ - Evening Star
+ - Three White Soldiers
+ - Three Black Crows
+ - White Marubozu
+ - Black Marubozu
+ - ...
