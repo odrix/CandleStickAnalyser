@@ -1,4 +1,4 @@
-package main
+package detectdaily
 
 import (
 	"context"
@@ -19,18 +19,26 @@ func main() {
 	logger = level.NewFilter(logger, level.AllowAll())
 	logger = log.With(logger, "time", log.DefaultTimestampUTC, "caller", log.DefaultCaller)
 
+	pairs := []string{"BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "ADAUSDT"}
+	// pairs := []string{"BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "ADAUSDT",
+	// 	"XRPUSDT", "DOTUSDT", "DOGEUSDT", "LUNAUSDT", "AVAXUSDT",
+	// 	"SHIBUSDT", "CROUSDT", "MATICUSDT", "LTCUSDT", "TRXUSDT",
+	// 	"ALGOUSDT", "LINKUSDT", "BCHUSDT", "OKBUSDT", "UNIUSDT",
+	// 	"AXSUSDT", "XLMUSDT", "ATOMUSDT", "NEARUSDT", "FTTUSDT",
+	// 	"VETUSDT", "EOSUSDT", "FILUSDT", "EGLDUSDT", "ETCUSDT",
+	// 	"SANDUSDT", "MANAUSDT", "XTZUSDT", "GALAUSDT", "THETAUSDT"}
 	//for i := 0; i < len(candlesDesc); i++ {
-	detectOnManyPairToday(logger)
+	DetectOnManyPairToday(pairs, logger)
 	//}
 	fmt.Printf("end.")
 }
 
-func detectOnManyPairToday(logger log.Logger) {
-	pairs := [5]string{"BTCUSDT", "ETHUSDT", "BNBUSDT", "SOLUSDT", "ADAUSDT"}
+func DetectOnManyPairToday(pairs []string, logger log.Logger) {
 
 	for j := 0; j < len(pairs); j++ {
 
 		pair := pairs[j]
+		fmt.Println(pair)
 		kl := getKline(logger, pair, binance.Day, 10)
 
 		var candlesDesc []Candle
@@ -54,28 +62,28 @@ func detectPattern(candlesDesc []Candle, i int, pair string) Pattern {
 		p = Pattern{
 			Pair:  pair,
 			Type:  "Morning Star",
-			Start: candlesDesc[i-2].OpenTime,
+			Start: candlesDesc[i+2].OpenTime,
 			End:   candlesDesc[i].CloseTime,
 		}
 	} else if IsEveningStar(candlesDesc[i:]) {
 		p = Pattern{
 			Pair:  pair,
 			Type:  "Evening Star",
-			Start: candlesDesc[i-2].OpenTime,
+			Start: candlesDesc[i+2].OpenTime,
 			End:   candlesDesc[i].CloseTime,
 		}
 	} else if IsThreeWhiteSoldiers(candlesDesc[i:]) {
 		p = Pattern{
 			Pair:  pair,
 			Type:  "Three White Soldiers",
-			Start: candlesDesc[i-2].OpenTime,
+			Start: candlesDesc[i+2].OpenTime,
 			End:   candlesDesc[i].CloseTime,
 		}
 	} else if IsThreeBlackCrows(candlesDesc[i:]) {
 		p = Pattern{
 			Pair:  pair,
 			Type:  "Three Black Crows",
-			Start: candlesDesc[i-2].OpenTime,
+			Start: candlesDesc[i+2].OpenTime,
 			End:   candlesDesc[i].CloseTime,
 		}
 	} else if IsWhiteMarubozu(candlesDesc[i:]) {
@@ -167,7 +175,10 @@ func getKline(logger log.Logger, symbol string, interval binance.Interval, limit
 		Limit:    limit,
 	})
 	if err != nil {
-		panic(err)
+		fmt.Printf("error on %s : %s \n", symbol, err.Error())
+		var empty []*binance.Kline
+		return empty
+		// panic(err)
 	}
 	return kl
 }

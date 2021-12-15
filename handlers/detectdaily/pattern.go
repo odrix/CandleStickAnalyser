@@ -1,10 +1,10 @@
-package main
+package detectdaily
 
 import "time"
 
 type Pattern struct {
-	Type string
-	Pair string
+	Type  string
+	Pair  string
 	Start time.Time
-	End time.Time
+	End   time.Time
 }
