@@ -6,7 +6,7 @@ import (
 	"github.com/binance-exchange/go-binance"
 )
 
-const maxCloseBody float64 = 0.005
+const maxTinyBody float64 = 0.01
 const maxSmallBody float64 = 0.02
 const minBigBody float64 = 0.05
 
@@ -41,12 +41,22 @@ func (candle Candle) BodyHighest() float64 { return math.Max(candle.Open, candle
 //func (candle RedCandle) HighShadow() float64 { return candle.High - candle.Open }
 //func (candle GreenCandle) HighShadow() float64 { return candle.High - candle.Close }
 
-func (candle Candle) IsClose() bool { return candle.BodyRatio() < maxCloseBody }
+func (candle Candle) IsTiny() bool  { return candle.BodyRatio() < maxTinyBody }
 func (candle Candle) IsSmall() bool { return candle.BodyRatio() < maxSmallBody }
 func (candle Candle) IsBody() bool {
 	return maxSmallBody > candle.BodyRatio() && candle.BodyRatio() < minBigBody
 }
 func (candle Candle) IsLong() bool { return candle.BodyRatio() > minBigBody }
+
+func (candle Candle) HasTinyTopShadow() bool  { return true }
+func (candle Candle) HasTopShadow() bool      { return true }
+func (candle Candle) HasSmallTopShadow() bool { return true }
+func (candle Candle) HasLongTopShadow() bool  { return true }
+
+func (candle Candle) HasTinyBottomShadow() bool  { return true }
+func (candle Candle) HasBottomShadow() bool      { return true }
+func (candle Candle) HasSmallBottomShadow() bool { return true }
+func (candle Candle) HasLongBottomShadow() bool  { return true }
 
 func IsMorningStar(candlesSortDesc []Candle) bool {
 	// one red not small plus one small with long low shadow and green not small and during a downtrend
@@ -95,6 +105,12 @@ func IsBlackMarubozu(candlesSortDesc []Candle) bool {
 	return len(candlesSortDesc) > 1 &&
 		candlesSortDesc[0].IsRed() && candlesSortDesc[0].IsLong() &&
 		IsUpTrend(candlesSortDesc[2:], 7)
+}
+
+func IsDoji(candleSortDesc []Candle) bool {
+	// a very small (tiny) with long top and bottom shadows
+	return len(candleSortDesc) > 1 &&
+		candleSortDesc[0].IsTiny()
 }
 
 // IsDownTrend is in a current downtrend
