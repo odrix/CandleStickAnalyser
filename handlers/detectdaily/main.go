@@ -42,7 +42,7 @@ func DetectOnManyPairToday(pairs []string, notifyOnlyEmail string, logger log.Lo
 
 		var candlesDesc []Candle
 		for i := len(kl) - 1; i > 0; i-- {
-			candlesDesc = append(candlesDesc, Candle{kl[i]})
+			candlesDesc = append(candlesDesc, KlineToCandle(kl[i]))
 		}
 
 		yesterday := 1
@@ -142,4 +142,19 @@ func getKline(logger log.Logger, symbol string, interval binance.Interval, limit
 		// panic(err)
 	}
 	return kl
+}
+
+func KlineToCandle(k *binance.Kline) Candle {
+	return Candle{
+		OpenTime:                 k.OpenTime,
+		Open:                     k.Open,
+		High:                     k.High,
+		Low:                      k.Low,
+		Close:                    k.Close,
+		Volume:                   k.Volume,
+		CloseTime:                k.CloseTime,
+		QuoteAssetVolume:         k.QuoteAssetVolume,
+		NumberOfTrades:           k.NumberOfTrades,
+		TakerBuyBaseAssetVolume:  k.TakerBuyBaseAssetVolume,
+		TakerBuyQuoteAssetVolume: k.TakerBuyQuoteAssetVolume}
 }

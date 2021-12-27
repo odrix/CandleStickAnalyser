@@ -2,8 +2,7 @@ package detectdaily
 
 import (
 	"math"
-
-	"github.com/binance-exchange/go-binance"
+	"time"
 )
 
 const maxTinyBody float64 = 0.01
@@ -14,7 +13,17 @@ const minBigBody float64 = 0.05
 //const minLongShadow float64 = 0.6
 
 type Candle struct {
-	*binance.Kline
+	OpenTime                 time.Time
+	Open                     float64
+	High                     float64
+	Low                      float64
+	Close                    float64
+	Volume                   float64
+	CloseTime                time.Time
+	QuoteAssetVolume         float64
+	NumberOfTrades           int
+	TakerBuyBaseAssetVolume  float64
+	TakerBuyQuoteAssetVolume float64
 }
 
 func (candle Candle) IsRed() bool   { return candle.Open > candle.Close }
