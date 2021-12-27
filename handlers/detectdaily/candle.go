@@ -83,7 +83,7 @@ func (candle Candle) HasLongBottomShadow() bool  { return true }
 func IsMorningStar(candlesSortDesc []Candle) bool {
 	// one red not small plus one small with long low shadow and green not small and during a downtrend
 	return len(candlesSortDesc) > 2 && candlesSortDesc[0].IsGreen() && !candlesSortDesc[0].IsSmall() &&
-		candlesSortDesc[1].IsSmall() &&
+		candlesSortDesc[1].IsSmall() && candlesSortDesc[1].HasBottomShadow() &&
 		candlesSortDesc[2].IsRed() && !candlesSortDesc[2].IsSmall() &&
 		IsDownTrend(candlesSortDesc[2:], 5)
 }
@@ -92,7 +92,7 @@ func IsEveningStar(candlesSortDesc []Candle) bool {
 	// one green not small plus one small with long low shadow and a red not small and during an uptrend
 	return len(candlesSortDesc) > 2 &&
 		candlesSortDesc[0].IsRed() && !candlesSortDesc[0].IsSmall() &&
-		candlesSortDesc[1].IsSmall() &&
+		candlesSortDesc[1].IsSmall() && candlesSortDesc[1].HasTopShadow() &&
 		candlesSortDesc[2].IsGreen() && !candlesSortDesc[2].IsSmall() &&
 		IsUpTrend(candlesSortDesc[2:], 5)
 }
