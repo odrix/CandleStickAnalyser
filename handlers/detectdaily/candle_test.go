@@ -31,6 +31,22 @@ func TestIsMorningStarDuringUpTrendShouldBeFalse(t *testing.T) {
 	assert.Equal(false, IsMorningStar(candles))
 }
 
+func TestIsDojiWithNoWicksShouldBeFalse(t *testing.T) {
+	assert := assert.New(t)
+	var candles []Candle
+	candles = append(candles, Candle{Open: 100, Close: 100.3}) // tiny candle with no wicks
+
+	assert.Equal(false, IsDoji(candles))
+}
+
+func TestIsDojiOK(t *testing.T) {
+	assert := assert.New(t)
+	var candles []Candle
+	candles = append(candles, Candle{Open: 100, Close: 100.3, High: 108, Low: 92}) // tiny candle with wicks
+
+	assert.Equal(true, IsDoji(candles))
+}
+
 func Reverse(candles []Candle) {
 	for i, j := 0, len(candles)-1; i < j; i, j = i+1, j-1 {
 		candles[i], candles[j] = candles[j], candles[i]

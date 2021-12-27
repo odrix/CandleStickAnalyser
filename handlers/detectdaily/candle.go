@@ -44,11 +44,24 @@ func (candle Candle) BodyLowest() float64 { return math.Min(candle.Open, candle.
 //BodyHighest the highest price in body's candle
 func (candle Candle) BodyHighest() float64 { return math.Max(candle.Open, candle.Close) }
 
+func (candle Candle) TopShadowRatio() float64 {
+	if candle.IsRed() {
+		return (candle.High - candle.Open) / candle.Open
+	} else {
+		return (candle.High - candle.Close) / candle.Close
+	}
+}
+
+func (candle Candle) BottomShadowRatio() float64 {
+	if candle.IsRed() {
+		return (candle.Close - candle.Low) / candle.Close
+	} else {
+		return (candle.Open - candle.Low) / candle.Open
+	}
+}
+
 //func (candle RedCandle) LowShadow() float64 { return candle.Low - candle.Close }
 //func (candle GreenCandle) LowShadow() float64 { return candle.Low - candle.Open }
-//
-//func (candle RedCandle) HighShadow() float64 { return candle.High - candle.Open }
-//func (candle GreenCandle) HighShadow() float64 { return candle.High - candle.Close }
 
 func (candle Candle) IsTiny() bool  { return candle.BodyRatio() < maxTinyBody }
 func (candle Candle) IsSmall() bool { return candle.BodyRatio() < maxSmallBody }
@@ -58,12 +71,12 @@ func (candle Candle) IsBody() bool {
 func (candle Candle) IsLong() bool { return candle.BodyRatio() > minBigBody }
 
 func (candle Candle) HasTinyTopShadow() bool  { return true }
-func (candle Candle) HasTopShadow() bool      { return true }
+func (candle Candle) HasTopShadow() bool      { return candle.TopShadowRatio() > maxSmallBody }
 func (candle Candle) HasSmallTopShadow() bool { return true }
 func (candle Candle) HasLongTopShadow() bool  { return true }
 
 func (candle Candle) HasTinyBottomShadow() bool  { return true }
-func (candle Candle) HasBottomShadow() bool      { return true }
+func (candle Candle) HasBottomShadow() bool      { return candle.BottomShadowRatio() > maxSmallBody }
 func (candle Candle) HasSmallBottomShadow() bool { return true }
 func (candle Candle) HasLongBottomShadow() bool  { return true }
 
@@ -118,8 +131,9 @@ func IsBlackMarubozu(candlesSortDesc []Candle) bool {
 
 func IsDoji(candleSortDesc []Candle) bool {
 	// a very small (tiny) with long top and bottom shadows
-	return len(candleSortDesc) > 1 &&
-		candleSortDesc[0].IsTiny()
+	return len(candleSortDesc) > 0 &&
+		candleSortDesc[0].IsTiny() &&
+		candleSortDesc[0].HasBottomShadow() && candleSortDesc[0].HasTopShadow()
 }
 
 // IsDownTrend is in a current downtrend
