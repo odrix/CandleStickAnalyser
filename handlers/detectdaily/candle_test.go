@@ -11,9 +11,9 @@ func TestIsMorningStarOK(t *testing.T) {
 	assert := assert.New(t)
 
 	candles := _createDownTrend(200, 130, 7)
-	candles = append(candles, Candle{Open: 130, Close: 120}) // red
-	candles = append(candles, Candle{Open: 120, Close: 118}) // small
-	candles = append(candles, Candle{Open: 118, Close: 125}) // green
+	candles = append(candles, Candle{Open: 130, Close: 120})           // red
+	candles = append(candles, Candle{Open: 120, Close: 118, Low: 115}) // small
+	candles = append(candles, Candle{Open: 118, Close: 125})           // green
 	_reverse(candles)
 
 	assert.Equal(true, IsMorningStar(candles))
@@ -73,6 +73,16 @@ func TestIsDojiWithNoWicksShouldBeFalse(t *testing.T) {
 	candles = append(candles, Candle{Open: 100, Close: 100.3}) // tiny candle with no wicks
 
 	assert.Equal(false, IsDoji(candles))
+}
+
+func TestIsHammer(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createDownTrend(220, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 145, Low: 122, High: 151.3})
+	_reverse(candles)
+
+	assert.Equal(true, IsHammer(candles))
 }
 
 func TestIsDojiOK(t *testing.T) {

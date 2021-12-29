@@ -111,6 +111,8 @@ func detectPattern(candlesDesc []Candle, startDayIndex int, pair string) Pattern
 			End:   candlesDesc[startDayIndex].CloseTime,
 		}
 	}
+	// TODO: hammer
+	// TODO: inverted hammer
 	return p
 }
 
