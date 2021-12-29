@@ -152,6 +152,14 @@ func IsHammer(candleSortDesc []Candle) bool {
 		IsDownTrend(candleSortDesc[1:], 7)
 }
 
+func IsInvertedHammer(candleSortDesc []Candle) bool {
+	// a real body with no or little bottom shadow and long (twice body) top shadow, during an uptrend
+	return len(candleSortDesc) > 0 &&
+		candleSortDesc[0].IsBody() &&
+		candleSortDesc[0].HasLongTopShadow() && candleSortDesc[0].HasTinyBottomShadow() &&
+		IsUpTrend(candleSortDesc[1:], 7)
+}
+
 // IsDownTrend is in a current downtrend
 // remarks:  not good, but it's a first shot
 func IsDownTrend(candlesSortDesc []Candle, trendDuration int) bool {

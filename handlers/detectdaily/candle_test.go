@@ -85,6 +85,26 @@ func TestIsHammer(t *testing.T) {
 	assert.Equal(true, IsHammer(candles))
 }
 
+func TestIsHammerwithTooSmallBottomShadowShouldBeFalse(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createDownTrend(220, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 145, Low: 140, High: 151.3})
+	_reverse(candles)
+
+	assert.Equal(false, IsHammer(candles))
+}
+
+func TestIsInvertedHammer(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createUpTrend(100, 200, 10)
+	candles = append(candles, Candle{Open: 200, Close: 195, Low: 194, High: 220})
+	_reverse(candles)
+
+	assert.Equal(true, IsInvertedHammer(candles))
+}
+
 func TestIsDojiOK(t *testing.T) {
 	assert := assert.New(t)
 	var candles []Candle
