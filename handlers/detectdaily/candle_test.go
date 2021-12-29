@@ -105,6 +105,56 @@ func TestIsInvertedHammer(t *testing.T) {
 	assert.Equal(true, IsInvertedHammer(candles))
 }
 
+func TestIsWhiteMarubozu(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createDownTrend(220, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 162, Low: 149, High: 163})
+	_reverse(candles)
+
+	assert.Equal(true, IsWhiteMarubozu(candles))
+}
+
+func TestIsWhiteMarubozuWithShadowsShouldBeFalse(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createDownTrend(220, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 162, Low: 146, High: 163})
+	_reverse(candles)
+
+	assert.Equal(false, IsWhiteMarubozu(candles))
+}
+
+func TestIsWhiteMarubozuDuringRangeShouldBeFalse(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createUpTrend(140, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 162, Low: 149, High: 163})
+	_reverse(candles)
+
+	assert.Equal(false, IsWhiteMarubozu(candles))
+}
+
+func TestIsBlackMarubozu(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createUpTrend(50, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 138, Low: 137, High: 151})
+	_reverse(candles)
+
+	assert.Equal(true, IsBlackMarubozu(candles))
+}
+
+func TestIsBlackMarubozuWithTopShadowShouldBeFalse(t *testing.T) {
+	assert := assert.New(t)
+
+	candles := _createUpTrend(50, 150, 10)
+	candles = append(candles, Candle{Open: 150, Close: 138, Low: 138, High: 155})
+	_reverse(candles)
+
+	assert.Equal(false, IsBlackMarubozu(candles))
+}
+
 func TestIsDojiOK(t *testing.T) {
 	assert := assert.New(t)
 	var candles []Candle

@@ -127,6 +127,7 @@ func IsWhiteMarubozu(candlesSortDesc []Candle) bool {
 	// a long green with no or very small shadow and during an downtrend
 	return len(candlesSortDesc) > 1 &&
 		candlesSortDesc[0].IsGreen() && candlesSortDesc[0].IsLong() &&
+		candlesSortDesc[0].HasTinyBottomShadow() && candlesSortDesc[0].HasTinyTopShadow() &&
 		IsDownTrend(candlesSortDesc[2:], 7)
 }
 
@@ -134,6 +135,7 @@ func IsBlackMarubozu(candlesSortDesc []Candle) bool {
 	// a long red with no or very small shadow and during an uptrend
 	return len(candlesSortDesc) > 1 &&
 		candlesSortDesc[0].IsRed() && candlesSortDesc[0].IsLong() &&
+		candlesSortDesc[0].HasTinyBottomShadow() && candlesSortDesc[0].HasTinyTopShadow() &&
 		IsUpTrend(candlesSortDesc[2:], 7)
 }
 
