@@ -17,6 +17,10 @@ func TestIsMorningStarOK(t *testing.T) {
 	_reverse(candles)
 
 	assert.Equal(true, IsMorningStar(candles))
+
+	pattern := detectPattern(candles, 0, "anyway")
+	assert.Equal("Morning Star", pattern.Type)
+	assert.Equal("Bullish", pattern.TrendDirection)
 }
 
 func TestIsMorningStarDuringUpTrendShouldBeFalse(t *testing.T) {
@@ -41,6 +45,10 @@ func TestIsEveningStarOK(t *testing.T) {
 	_reverse(candles)
 
 	assert.Equal(true, IsEveningStar(candles))
+
+	pattern := detectPattern(candles, 0, "anyway")
+	assert.Equal("Evening Star", pattern.Type)
+	assert.Equal("Bearish", pattern.TrendDirection)
 }
 
 func TestIsEveningStarWithSmallWicksShouldBeFalse(t *testing.T) {
@@ -83,6 +91,10 @@ func TestIsHammer(t *testing.T) {
 	_reverse(candles)
 
 	assert.Equal(true, IsHammer(candles))
+
+	pattern := detectPattern(candles, 0, "anyway")
+	assert.Equal("Hammer", pattern.Type)
+	assert.Equal("Bullish", pattern.TrendDirection)
 }
 
 func TestIsHammerwithTooSmallBottomShadowShouldBeFalse(t *testing.T) {
@@ -103,6 +115,10 @@ func TestIsInvertedHammer(t *testing.T) {
 	_reverse(candles)
 
 	assert.Equal(true, IsInvertedHammer(candles))
+
+	pattern := detectPattern(candles, 0, "anyway")
+	assert.Equal("Inverted Hammer", pattern.Type)
+	assert.Equal("Bearish", pattern.TrendDirection)
 }
 
 func TestIsWhiteMarubozu(t *testing.T) {
@@ -113,6 +129,10 @@ func TestIsWhiteMarubozu(t *testing.T) {
 	_reverse(candles)
 
 	assert.Equal(true, IsWhiteMarubozu(candles))
+
+	pattern := detectPattern(candles, 0, "anyway")
+	assert.Equal("White Marubozu", pattern.Type)
+	assert.Equal("Bullish", pattern.TrendDirection)
 }
 
 func TestIsWhiteMarubozuWithShadowsShouldBeFalse(t *testing.T) {
@@ -143,6 +163,10 @@ func TestIsBlackMarubozu(t *testing.T) {
 	_reverse(candles)
 
 	assert.Equal(true, IsBlackMarubozu(candles))
+
+	pattern := detectPattern(candles, 0, "anyway")
+	assert.Equal("Black Marubozu", pattern.Type)
+	assert.Equal("Bearish", pattern.TrendDirection)
 }
 
 func TestIsBlackMarubozuWithTopShadowShouldBeFalse(t *testing.T) {

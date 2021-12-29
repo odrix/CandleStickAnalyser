@@ -63,56 +63,77 @@ func detectPattern(candlesDesc []Candle, startDayIndex int, pair string) Pattern
 	p := Pattern{}
 	if IsMorningStar(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "Morning Star",
-			Start: candlesDesc[startDayIndex+2].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "Morning Star",
+			TrendDirection: "Bullish",
+			Start:          candlesDesc[startDayIndex+2].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	} else if IsEveningStar(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "Evening Star",
-			Start: candlesDesc[startDayIndex+2].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "Evening Star",
+			TrendDirection: "Bearish",
+			Start:          candlesDesc[startDayIndex+2].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	} else if IsThreeWhiteSoldiers(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "Three White Soldiers",
-			Start: candlesDesc[startDayIndex+2].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "Three White Soldiers",
+			TrendDirection: "Bullish",
+			Start:          candlesDesc[startDayIndex+2].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	} else if IsThreeBlackCrows(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "Three Black Crows",
-			Start: candlesDesc[startDayIndex+2].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "Three Black Crows",
+			TrendDirection: "Bearish",
+			Start:          candlesDesc[startDayIndex+2].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	} else if IsWhiteMarubozu(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "White Marubozu",
-			Start: candlesDesc[startDayIndex].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "White Marubozu",
+			TrendDirection: "Bullish",
+			Start:          candlesDesc[startDayIndex].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	} else if IsBlackMarubozu(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "Black Marubozu",
-			Start: candlesDesc[startDayIndex].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "Black Marubozu",
+			TrendDirection: "Bearish",
+			Start:          candlesDesc[startDayIndex].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
+		}
+	} else if IsHammer(candlesDesc[startDayIndex:]) {
+		p = Pattern{
+			Pair:           pair,
+			Type:           "Hammer",
+			TrendDirection: "Bullish",
+			Start:          candlesDesc[startDayIndex].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
+		}
+	} else if IsInvertedHammer(candlesDesc[startDayIndex:]) {
+		p = Pattern{
+			Pair:           pair,
+			Type:           "Inverted Hammer",
+			TrendDirection: "Bearish",
+			Start:          candlesDesc[startDayIndex].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	} else if IsDoji(candlesDesc[startDayIndex:]) {
 		p = Pattern{
-			Pair:  pair,
-			Type:  "Doji",
-			Start: candlesDesc[startDayIndex].OpenTime,
-			End:   candlesDesc[startDayIndex].CloseTime,
+			Pair:           pair,
+			Type:           "Doji",
+			TrendDirection: "Continuation",
+			Start:          candlesDesc[startDayIndex].OpenTime,
+			End:            candlesDesc[startDayIndex].CloseTime,
 		}
 	}
-	// TODO: hammer
-	// TODO: inverted hammer
 	return p
 }
 

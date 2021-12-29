@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"os"
+	"strings"
 
 	sendinblue "github.com/sendinblue/APIv3-go-library/lib"
 )
@@ -25,8 +26,10 @@ func notifyContacts(pattern Pattern) {
 
 	var templateParams interface{}
 	templateParams = map[string]interface{}{
-		"pair":    pattern.Pair,
-		"pattern": pattern.Type,
+		"pair":      pattern.Pair,
+		"pattern":   pattern.Type,
+		"trend":     strings.ToLower(pattern.TrendDirection),
+		"timeframe": "daily",
 	}
 
 	body := sendinblue.SendSmtpEmail{
