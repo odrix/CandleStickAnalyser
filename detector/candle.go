@@ -1,4 +1,4 @@
-package detectdaily
+package detector
 
 import (
 	"math"
