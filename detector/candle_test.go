@@ -18,7 +18,7 @@ func TestIsMorningStarOK(t *testing.T) {
 
 	assert.Equal(true, IsMorningStar(candles))
 
-	pattern := DetectPattern(candles, 0, "anyway")
+	pattern := detectPattern(candles, 0, "anyway")
 	assert.Equal("Morning Star", pattern.Type)
 	assert.Equal("Bullish", pattern.TrendDirection)
 }
@@ -46,7 +46,7 @@ func TestIsEveningStarOK(t *testing.T) {
 
 	assert.Equal(true, IsEveningStar(candles))
 
-	pattern := DetectPattern(candles, 0, "anyway")
+	pattern := detectPattern(candles, 0, "anyway")
 	assert.Equal("Evening Star", pattern.Type)
 	assert.Equal("Bearish", pattern.TrendDirection)
 }
@@ -92,7 +92,7 @@ func TestIsHammer(t *testing.T) {
 
 	assert.Equal(true, IsHammer(candles))
 
-	pattern := DetectPattern(candles, 0, "anyway")
+	pattern := detectPattern(candles, 0, "anyway")
 	assert.Equal("Hammer", pattern.Type)
 	assert.Equal("Bullish", pattern.TrendDirection)
 }
@@ -116,7 +116,7 @@ func TestIsInvertedHammer(t *testing.T) {
 
 	assert.Equal(true, IsInvertedHammer(candles))
 
-	pattern := DetectPattern(candles, 0, "anyway")
+	pattern := detectPattern(candles, 0, "anyway")
 	assert.Equal("Inverted Hammer", pattern.Type)
 	assert.Equal("Bearish", pattern.TrendDirection)
 }
@@ -130,7 +130,7 @@ func TestIsWhiteMarubozu(t *testing.T) {
 
 	assert.Equal(true, IsWhiteMarubozu(candles))
 
-	pattern := DetectPattern(candles, 0, "anyway")
+	pattern := detectPattern(candles, 0, "anyway")
 	assert.Equal("White Marubozu", pattern.Type)
 	assert.Equal("Bullish", pattern.TrendDirection)
 }
@@ -164,7 +164,7 @@ func TestIsBlackMarubozu(t *testing.T) {
 
 	assert.Equal(true, IsBlackMarubozu(candles))
 
-	pattern := DetectPattern(candles, 0, "anyway")
+	pattern := detectPattern(candles, 0, "anyway")
 	assert.Equal("Black Marubozu", pattern.Type)
 	assert.Equal("Bearish", pattern.TrendDirection)
 }

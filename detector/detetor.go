@@ -8,85 +8,85 @@ import (
 	"github.com/go-kit/kit/log"
 )
 
-func DetectPattern(candlesDesc []Candle, startDayIndex int, pair string) Pattern {
+func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Pattern {
 	p := Pattern{}
-	if IsMorningStar(candlesDesc[startDayIndex:]) {
+	if IsMorningStar(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Morning Star",
 			TrendDirection: "Bullish",
-			Start:          candlesDesc[startDayIndex+2].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex+2].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsEveningStar(candlesDesc[startDayIndex:]) {
+	} else if IsEveningStar(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Evening Star",
 			TrendDirection: "Bearish",
-			Start:          candlesDesc[startDayIndex+2].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex+2].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsThreeWhiteSoldiers(candlesDesc[startDayIndex:]) {
+	} else if IsThreeWhiteSoldiers(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Three White Soldiers",
 			TrendDirection: "Bullish",
-			Start:          candlesDesc[startDayIndex+2].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex+2].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsThreeBlackCrows(candlesDesc[startDayIndex:]) {
+	} else if IsThreeBlackCrows(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Three Black Crows",
 			TrendDirection: "Bearish",
-			Start:          candlesDesc[startDayIndex+2].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex+2].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsWhiteMarubozu(candlesDesc[startDayIndex:]) {
+	} else if IsWhiteMarubozu(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "White Marubozu",
 			TrendDirection: "Bullish",
-			Start:          candlesDesc[startDayIndex].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsBlackMarubozu(candlesDesc[startDayIndex:]) {
+	} else if IsBlackMarubozu(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Black Marubozu",
 			TrendDirection: "Bearish",
-			Start:          candlesDesc[startDayIndex].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsHammer(candlesDesc[startDayIndex:]) {
+	} else if IsHammer(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Hammer",
 			TrendDirection: "Bullish",
-			Start:          candlesDesc[startDayIndex].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsInvertedHammer(candlesDesc[startDayIndex:]) {
+	} else if IsInvertedHammer(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Inverted Hammer",
 			TrendDirection: "Bearish",
-			Start:          candlesDesc[startDayIndex].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
-	} else if IsDoji(candlesDesc[startDayIndex:]) {
+	} else if IsDoji(candlesDesc[startCandleIndex:]) {
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Doji",
 			TrendDirection: "Continuation",
-			Start:          candlesDesc[startDayIndex].OpenTime,
-			End:            candlesDesc[startDayIndex].CloseTime,
+			Start:          candlesDesc[startCandleIndex].OpenTime,
+			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
 	}
 	return p
 }
 
-func GetKline(logger log.Logger, symbol string, interval binance.Interval, limit int) []*binance.Kline {
+func getKline(logger log.Logger, symbol string, interval binance.Interval, limit int) []*binance.Kline {
 	var ctx, cancel = context.WithCancel(context.Background())
 
 	binanceService := binance.NewAPIService(
@@ -113,7 +113,7 @@ func GetKline(logger log.Logger, symbol string, interval binance.Interval, limit
 	return kl
 }
 
-func KlineToCandle(k *binance.Kline) Candle {
+func klineToCandle(k *binance.Kline) Candle {
 	return Candle{
 		OpenTime:                 k.OpenTime,
 		Open:                     k.Open,
@@ -126,4 +126,17 @@ func KlineToCandle(k *binance.Kline) Candle {
 		NumberOfTrades:           k.NumberOfTrades,
 		TakerBuyBaseAssetVolume:  k.TakerBuyBaseAssetVolume,
 		TakerBuyQuoteAssetVolume: k.TakerBuyQuoteAssetVolume}
+}
+
+func Detect(logger log.Logger, pair string, interval binance.Interval) Pattern {
+	kl := getKline(logger, pair, interval, 10)
+
+	var candlesDesc []Candle
+	for i := len(kl) - 1; i > 0; i-- {
+		candlesDesc = append(candlesDesc, klineToCandle(kl[i]))
+	}
+
+	yesterday := 1
+	p := detectPattern(candlesDesc, yesterday, pair)
+	return p
 }

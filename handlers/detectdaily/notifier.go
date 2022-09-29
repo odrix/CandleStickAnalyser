@@ -6,6 +6,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/michimani/gotwi"
+	"github.com/michimani/gotwi/tweet/managetweet"
+	"github.com/michimani/gotwi/tweet/managetweet/types"
 	sendinblue "github.com/sendinblue/APIv3-go-library/lib"
 	"klintt.io/detect/detector"
 )
@@ -85,7 +88,30 @@ func notifyOneEmail(pattern detector.Pattern, emailNotify string) {
 }
 
 func notifyTwitter(pattern detector.Pattern) {
+	in := &gotwi.NewClientInput{
+		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
+		OAuthToken:           os.Getenv("TWITTER_TOKEN"),
+		OAuthTokenSecret:     os.Getenv("TWITTER_SECRET"),
+	}
 
+	client, err := gotwi.NewClient(in)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	tweetText := fmt.Sprintf("A %s was detecting on %s this hour.", pattern.Type, pattern.Pair)
+	tweetInput := &types.CreateInput{
+		Text: gotwi.String(tweetText),
+	}
+
+	tweet, err := managetweet.Create(context.Background(), client, tweetInput)
+	if err != nil {
+		fmt.Println(err.Error())
+		return
+	}
+
+	fmt.Printf("[%s] %s\n", gotwi.StringValue(tweet.Data.ID), gotwi.StringValue(tweet.Data.Text))
 }
 
 func notifyFacebook(pattern detector.Pattern) {

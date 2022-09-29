@@ -38,15 +38,7 @@ func DetectOnManyPairToday(pairs []string, notifyOnlyEmail string, logger log.Lo
 
 		pair := pairs[j]
 		fmt.Println(pair)
-		kl := detector.GetKline(logger, pair, binance.Day, 10)
-
-		var candlesDesc []detector.Candle
-		for i := len(kl) - 1; i > 0; i-- {
-			candlesDesc = append(candlesDesc, detector.KlineToCandle(kl[i]))
-		}
-
-		yesterday := 1
-		p := detector.DetectPattern(candlesDesc, yesterday, pair)
+		p := detector.Detect(logger, pair, binance.Day)
 
 		if p.Type != "" {
 			trace(p)
