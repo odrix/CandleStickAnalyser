@@ -86,11 +86,7 @@ func DetectPattern(candlesDesc []Candle, startDayIndex int, pair string) Pattern
 	return p
 }
 
-func trace(pattern Pattern) {
-	fmt.Printf("%s on %s \n", pattern.Type, pattern.Start)
-}
-
-func getKline(logger log.Logger, symbol string, interval binance.Interval, limit int) []*binance.Kline {
+func GetKline(logger log.Logger, symbol string, interval binance.Interval, limit int) []*binance.Kline {
 	var ctx, cancel = context.WithCancel(context.Background())
 
 	binanceService := binance.NewAPIService(

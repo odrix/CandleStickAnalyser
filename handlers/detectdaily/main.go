@@ -7,6 +7,7 @@ import (
 	"github.com/binance-exchange/go-binance"
 	"github.com/go-kit/kit/log"
 	"github.com/go-kit/kit/log/level"
+	"klintt.io/detect/detector"
 )
 
 //const baseUrl string = "https://api.binance.com"
@@ -37,15 +38,15 @@ func DetectOnManyPairToday(pairs []string, notifyOnlyEmail string, logger log.Lo
 
 		pair := pairs[j]
 		fmt.Println(pair)
-		kl := detector.getKline(logger, pair, binance.Day, 10)
+		kl := detector.GetKline(logger, pair, binance.Day, 10)
 
-		var candlesDesc []Candle
+		var candlesDesc []detector.Candle
 		for i := len(kl) - 1; i > 0; i-- {
-			candlesDesc = append(candlesDesc, KlineToCandle(kl[i]))
+			candlesDesc = append(candlesDesc, detector.KlineToCandle(kl[i]))
 		}
 
 		yesterday := 1
-		p := detectPattern(candlesDesc, yesterday, pair)
+		p := detector.DetectPattern(candlesDesc, yesterday, pair)
 
 		if p.Type != "" {
 			trace(p)
@@ -56,4 +57,8 @@ func DetectOnManyPairToday(pairs []string, notifyOnlyEmail string, logger log.Lo
 			}
 		}
 	}
+}
+
+func trace(pattern detector.Pattern) {
+	fmt.Printf("%s on %s \n", pattern.Type, pattern.Start)
 }

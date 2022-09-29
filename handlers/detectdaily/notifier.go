@@ -7,9 +7,10 @@ import (
 	"strings"
 
 	sendinblue "github.com/sendinblue/APIv3-go-library/lib"
+	"klintt.io/detect/detector"
 )
 
-func notifyContacts(pattern Pattern) {
+func notifyContacts(pattern detector.Pattern) {
 
 	var ctx context.Context
 	cfg := sendinblue.NewConfiguration()
@@ -52,7 +53,7 @@ func notifyContacts(pattern Pattern) {
 	fmt.Println("send template 5:", email)
 }
 
-func notifyOneEmail(pattern Pattern, emailNotify string) {
+func notifyOneEmail(pattern detector.Pattern, emailNotify string) {
 
 	var ctx context.Context
 	cfg := sendinblue.NewConfiguration()
@@ -83,10 +84,10 @@ func notifyOneEmail(pattern Pattern, emailNotify string) {
 	fmt.Println("send template 5:", email)
 }
 
-func notifyTwitter(pattern Pattern) {
+func notifyTwitter(pattern detector.Pattern) {
 
 }
 
-func notifyFacebook(pattern Pattern) {
+func notifyFacebook(pattern detector.Pattern) {
 
 }
