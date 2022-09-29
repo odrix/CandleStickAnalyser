@@ -90,8 +90,8 @@ func notifyOneEmail(pattern detector.Pattern, emailNotify string) {
 func notifyTwitter(pattern detector.Pattern) {
 	in := &gotwi.NewClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
-		OAuthToken:           os.Getenv("TWITTER_TOKEN"),
-		OAuthTokenSecret:     os.Getenv("TWITTER_SECRET"),
+		OAuthToken:           os.Getenv("GOTWI_API_KEY"),
+		OAuthTokenSecret:     os.Getenv("GOTWI_API_KEY_SECRET"),
 	}
 
 	client, err := gotwi.NewClient(in)

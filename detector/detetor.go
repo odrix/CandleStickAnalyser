@@ -3,10 +3,14 @@ package detector
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"github.com/binance-exchange/go-binance"
 	"github.com/go-kit/kit/log"
+	"github.com/go-kit/log/level"
 )
+
+//const baseUrl string = "https://api.binance.com"
 
 func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Pattern {
 	p := Pattern{}
@@ -128,7 +132,12 @@ func klineToCandle(k *binance.Kline) Candle {
 		TakerBuyQuoteAssetVolume: k.TakerBuyQuoteAssetVolume}
 }
 
-func Detect(logger log.Logger, pair string, interval binance.Interval) Pattern {
+func Detect(pair string, interval binance.Interval) Pattern {
+	var logger log.Logger
+	logger = log.NewLogfmtLogger(log.NewSyncWriter(os.Stderr))
+	logger = level.NewFilter(logger, level.AllowAll())
+	logger = log.With(logger, "time", log.DefaultTimestampUTC, "caller", log.DefaultCaller)
+
 	kl := getKline(logger, pair, interval, 10)
 
 	var candlesDesc []Candle

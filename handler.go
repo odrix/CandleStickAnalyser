@@ -23,13 +23,13 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, err
 	}
 
-	detectdaily.DetectOnManyPairToday(model.Pairs, model.OnlyFor, nil)
+	detectdaily.DetectOnManyPairToday(model.Pairs, model.OnlyFor)
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,
 	}, nil
 }
 
-func main() {
+func main2() {
 	lambda.Start(handler)
 }
