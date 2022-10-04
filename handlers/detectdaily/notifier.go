@@ -32,7 +32,7 @@ func notifyContacts(pattern detector.Pattern) {
 	templateParams = map[string]interface{}{
 		"pair":      pattern.Pair,
 		"pattern":   pattern.Type,
-		"trend":     strings.ToLower(pattern.TrendDirection),
+		"trend":     strings.ToLower(pattern.TrendDirection.Label()),
 		"timeframe": "daily",
 	}
 
@@ -88,10 +88,11 @@ func notifyOneEmail(pattern detector.Pattern, emailNotify string) {
 }
 
 func notifyTwitter(pattern detector.Pattern) {
+
 	in := &gotwi.NewClientInput{
 		AuthenticationMethod: gotwi.AuthenMethodOAuth1UserContext,
-		OAuthToken:           os.Getenv("GOTWI_API_KEY"),
-		OAuthTokenSecret:     os.Getenv("GOTWI_API_KEY_SECRET"),
+		OAuthToken:           os.Getenv("KLINTT_KEY"),
+		OAuthTokenSecret:     os.Getenv("KLINTT_SECRET"),
 	}
 
 	client, err := gotwi.NewClient(in)
@@ -100,7 +101,11 @@ func notifyTwitter(pattern detector.Pattern) {
 		return
 	}
 
-	tweetText := fmt.Sprintf("A %s was detecting on %s this hour.", pattern.Type, pattern.Pair)
+	tweetText := fmt.Sprintf("A %s was detecting on $%s this hour %s",
+		pattern.Type,
+		pattern.Pair,
+		pattern.TrendDirection.Icon())
+
 	tweetInput := &types.CreateInput{
 		Text: gotwi.String(tweetText),
 	}

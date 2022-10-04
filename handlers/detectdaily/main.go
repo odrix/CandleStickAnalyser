@@ -17,20 +17,18 @@ func main() {
 	// 	"AXSBUSD", "XLMBUSD", "ATOMBUSD", "NEARBUSD", "FTTBUSD",
 	// 	"VETBUSD", "EOSBUSD", "FILBUSD", "EGLDBUSD", "ETCBUSD",
 	// 	"SANDBUSD", "MANABUSD", "XTZBUSD", "GALABUSD", "THETABUSD"}
-	//for i := 0; i < len(candlesDesc); i++ {
-	//DetectOnManyPairToday(pairs, "")
-	DetectOnManyPairHour(pairs)
-	//}
+	DetectAndEmail(pairs, "", binance.Day)
+	//DetectAndTweet(pairs)
 	fmt.Printf("end.")
 }
 
-func DetectOnManyPairToday(pairs []string, notifyOnlyEmail string) {
+func DetectAndEmail(pairs []string, notifyOnlyEmail string, interval binance.Interval) {
 
 	for j := 0; j < len(pairs); j++ {
 
 		pair := pairs[j]
 		fmt.Println(pair)
-		p := detector.Detect(pair, binance.Day)
+		p := detector.Detect(pair, interval)
 
 		if p.Type != "" {
 			trace(p)
@@ -43,13 +41,13 @@ func DetectOnManyPairToday(pairs []string, notifyOnlyEmail string) {
 	}
 }
 
-func DetectOnManyPairHour(pairs []string) {
+func DetectAndTweet(pairs []string, interval binance.Interval) {
 
 	for j := 0; j < len(pairs); j++ {
 
 		pair := pairs[j]
 		fmt.Println(pair)
-		p := detector.Detect(pair, binance.Day)
+		p := detector.Detect(pair, interval)
 
 		if p.Type != "" {
 			trace(p)

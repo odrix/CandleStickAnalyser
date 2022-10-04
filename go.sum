@@ -49,6 +49,8 @@ github.com/envoyproxy/go-control-plane v0.9.0/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymF
 github.com/envoyproxy/go-control-plane v0.9.1-0.20191026205805-5f8ba28d4473/go.mod h1:YTl/9mNaCwkRvm6d1a2C3ymFceY/DCBVvsKhRF0iEA4=
 github.com/envoyproxy/go-control-plane v0.9.4/go.mod h1:6rpuAdCZL397s3pYoYcLgu1mIlRU8Am5FuJP05cCM98=
 github.com/envoyproxy/protoc-gen-validate v0.1.0/go.mod h1:iSmxcyjqTsJpI2R4NaDN7+kN2VEUnK/pcBlmesArF7c=
+github.com/g8rswimmer/go-twitter/v2 v2.1.2 h1:n5vwjp2l/9/TdJSkVoENmD3xErHiK/cNi0BBSs597rA=
+github.com/g8rswimmer/go-twitter/v2 v2.1.2/go.mod h1:/55xWb313KQs25X7oZrNSEwLQNkYHhPsDwFstc45vhc=
 github.com/go-gl/glfw v0.0.0-20190409004039-e6da0acd62b1/go.mod h1:vR7hzQXu2zJy9AVAgeJqvqgH9Q5CA+iKCZ2gyEVpxRU=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20191125211704-12ad95a8df72/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
 github.com/go-gl/glfw/v3.3/glfw v0.0.0-20200222043503-6f7a984d4dc4/go.mod h1:tQ2UAYgL5IevRw8kRxooKSPJfGvJ9fJQFa0TUsXzTg8=
@@ -133,6 +135,8 @@ github.com/scaleway/scaleway-functions-go v0.0.0-20211103103919-280251df088b h1:
 github.com/scaleway/scaleway-functions-go v0.0.0-20211103103919-280251df088b/go.mod h1:bpwyJakDwy3vzlVI6EydCG3uK50TrH46S65+bfTRAfM=
 github.com/sendinblue/APIv3-go-library v2.0.0+incompatible h1:42+8Vpk+y6jOWyqZHWDaYwVZoQQzAd/xubfkD4IV5Lg=
 github.com/sendinblue/APIv3-go-library v2.0.0+incompatible/go.mod h1:n7Mrg8LF5Y9qvuiuJBuLzxnMWNfM7r2AWicEMs1faxY=
+github.com/sivchari/gotwtr v1.1.1 h1:Wu4BiqXnEtGWBPeFtddZf8J6MCVXbqdjJdMd3eT3+Fc=
+github.com/sivchari/gotwtr v1.1.1/go.mod h1:Fh5ysSUvNhCmRg5Cxa4GYHd8DuF/0votPhctE/t1ksk=
 github.com/stretchr/objx v0.1.0 h1:4G4v2dO3VZwixGIRoQ5Lfboy6nUhCyYzaqnIAPPhYs4=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/testify v1.4.0/go.mod h1:j7eGeouHqKxXV5pUuKE4zz7dFj8WfuZ+81PSLYec5m4=

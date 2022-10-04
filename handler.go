@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/binance-exchange/go-binance"
 	"github.com/scaleway/scaleway-functions-go/events"
 	"github.com/scaleway/scaleway-functions-go/lambda"
 	"klintt.io/detect/handlers/detectdaily"
@@ -23,7 +24,7 @@ func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 		return events.APIGatewayProxyResponse{}, err
 	}
 
-	detectdaily.DetectOnManyPairToday(model.Pairs, model.OnlyFor)
+	detectdaily.DetectAndEmail(model.Pairs, model.OnlyFor, binance.Day)
 
 	return events.APIGatewayProxyResponse{
 		StatusCode: 200,

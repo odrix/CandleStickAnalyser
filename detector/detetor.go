@@ -18,7 +18,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Morning Star",
-			TrendDirection: "Bullish",
+			TrendDirection: Bullish,
 			Start:          candlesDesc[startCandleIndex+2].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -26,7 +26,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Evening Star",
-			TrendDirection: "Bearish",
+			TrendDirection: Bearish,
 			Start:          candlesDesc[startCandleIndex+2].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -34,7 +34,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Three White Soldiers",
-			TrendDirection: "Bullish",
+			TrendDirection: Bullish,
 			Start:          candlesDesc[startCandleIndex+2].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -42,7 +42,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Three Black Crows",
-			TrendDirection: "Bearish",
+			TrendDirection: Bearish,
 			Start:          candlesDesc[startCandleIndex+2].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -50,7 +50,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "White Marubozu",
-			TrendDirection: "Bullish",
+			TrendDirection: Bullish,
 			Start:          candlesDesc[startCandleIndex].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -58,7 +58,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Black Marubozu",
-			TrendDirection: "Bearish",
+			TrendDirection: Bearish,
 			Start:          candlesDesc[startCandleIndex].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -66,7 +66,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Hammer",
-			TrendDirection: "Bullish",
+			TrendDirection: Bullish,
 			Start:          candlesDesc[startCandleIndex].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -74,7 +74,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Inverted Hammer",
-			TrendDirection: "Bearish",
+			TrendDirection: Bearish,
 			Start:          candlesDesc[startCandleIndex].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
@@ -82,7 +82,7 @@ func detectPattern(candlesDesc []Candle, startCandleIndex int, pair string) Patt
 		p = Pattern{
 			Pair:           pair,
 			Type:           "Doji",
-			TrendDirection: "Continuation",
+			TrendDirection: Continuation,
 			Start:          candlesDesc[startCandleIndex].OpenTime,
 			End:            candlesDesc[startCandleIndex].CloseTime,
 		}
