@@ -103,7 +103,7 @@ func notifyTwitter(pattern detector.Pattern) {
 
 	tweetText := fmt.Sprintf("A %s was detecting on $%s this hour %s",
 		pattern.Type,
-		pattern.Pair,
+		strings.Replace(pattern.Pair, "BUSD", "", -1),
 		pattern.TrendDirection.Icon())
 
 	tweetInput := &types.CreateInput{

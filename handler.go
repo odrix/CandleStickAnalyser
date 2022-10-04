@@ -1,13 +1,12 @@
-package main
+package handler
 
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 
 	"github.com/binance-exchange/go-binance"
-	"github.com/scaleway/scaleway-functions-go/events"
-	"github.com/scaleway/scaleway-functions-go/lambda"
-	"klintt.io/detect/handlers/detectdaily"
+	"klintt.io/detect/detectdaily"
 )
 
 type Model struct {
@@ -15,22 +14,20 @@ type Model struct {
 	OnlyFor string   `json:"onlyFor"`
 }
 
-func handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
+func Handle(w http.ResponseWriter, r *http.Request) {
 
 	model := Model{}
-	err := json.Unmarshal([]byte(request.Body), &model)
+
+	err := json.NewDecoder(r.Body).Decode(&model)
 	if err != nil {
 		fmt.Println(err)
-		return events.APIGatewayProxyResponse{}, err
+		w.WriteHeader(http.StatusInternalServerError)
+		return
 	}
 
-	detectdaily.DetectAndEmail(model.Pairs, model.OnlyFor, binance.Day)
+	// detectdaily.DetectAndEmail(model.Pairs, model.OnlyFor, binance.Day)
+	detectdaily.DetectAndTweet(model.Pairs, binance.Hour)
 
-	return events.APIGatewayProxyResponse{
-		StatusCode: 200,
-	}, nil
-}
-
-func main2() {
-	lambda.Start(handler)
+	w.Header().Set("Content-Type", "application/json")
+	fmt.Fprint(w, string(""))
 }
